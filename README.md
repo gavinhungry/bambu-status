@@ -77,3 +77,7 @@ state). It reads from the server via HTTP:
 bambu-status        # prints short status, e.g. "1h, 20m (45%)"
 bambu-status --raw  # prints full raw JSON status
 ```
+
+License
+-------
+This software is released under the terms of the **MIT license**. See `LICENSE`.
