@@ -5,6 +5,13 @@ const BAMBU_IP = process.env.BAMBU_IP;
 const BAMBU_ACCESS = process.env.BAMBU_ACCESS;
 const BAMBU_SERIAL = process.env.BAMBU_SERIAL;
 
+['BAMBU_IP', 'BAMBU_ACCESS', 'BAMBU_SERIAL'].forEach(name => {
+  if (!process.env[name]) {
+    console.error(`Missing required environment variable: ${name}`);
+    process.exit(1);
+  }
+});
+
 const PORT = 30971;
 
 const client = mqtt.connect(`mqtts://${BAMBU_IP}:8883`, {
