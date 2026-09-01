@@ -1,30 +1,31 @@
 const mqtt = require('mqtt');
 const http = require('http');
 
-['BAMBU_IP', 'BAMBU_ACCESS', 'BAMBU_SERIAL'].forEach(name => {
-  if (!process.env[name]) {
-    console.error(`Missing required environment variable: ${name}`);
+const ENV = {};
+
+['BAMBU_IP', 'BAMBU_ACCESS', 'BAMBU_SERIAL'].forEach(envVar => {
+  const value = !process.env[envVar];
+  if (!value) {
+    console.error(`Missing required environment variable: ${envVar}`);
     process.exit(1);
   }
-});
 
-const BAMBU_IP = process.env.BAMBU_IP;
-const BAMBU_ACCESS = process.env.BAMBU_ACCESS;
-const BAMBU_SERIAL = process.env.BAMBU_SERIAL;
+  ENV[envVar] = value;
+});
 
 const PORT = 30971;
 
-const client = mqtt.connect(`mqtts://${BAMBU_IP}:8883`, {
+const client = mqtt.connect(`mqtts://${ENV.BAMBU_IP}:8883`, {
   username: 'bblp',
-  password: BAMBU_ACCESS,
+  password: ENV.BAMBU_ACCESS,
   rejectUnauthorized: false,
 });
 
 let status = {};
 
 client.on('connect', () => {
-  client.subscribe(`device/${BAMBU_SERIAL}/report`);
-  console.log(`Client: connected to ${BAMBU_IP}`);
+  client.subscribe(`device/${ENV.BAMBU_SERIAL}/report`);
+  console.log(`MQTT: connected to ${ENV.BAMBU_IP}`);
   status = {};
 });
 
@@ -63,5 +64,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server: running on http://localhost:${PORT}`);
+  console.log(`HTTP: running on http://localhost:${PORT}`);
 });
