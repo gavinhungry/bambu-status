@@ -1,11 +1,13 @@
-# bambu-status
+bambu-status
+============
 
 A lightweight HTTP status server for Bambu Lab printers. It connects to a
 printer's local MQTT broker, tracks the latest print status, and exposes it as
 JSON over HTTP. Includes a bash CLI helper for quick status checks (e.g., in a
 shell prompt or status bar).
 
-## Configuration
+Configuration
+-------------
 
 The server reads printer connection details from environment variables:
 
@@ -17,7 +19,8 @@ The server reads printer connection details from environment variables:
 
 The HTTP server listens on port `30971`.
 
-## Running
+Running
+-------
 
 ```sh
 npm start
@@ -54,7 +57,8 @@ sudo systemctl daemon-reload
 sudo systemctl restart bambu-status
 ```
 
-## CLI
+CLI
+---
 
 The `bambu-status` bash script queries the running server and prints a
 short status summary (e.g. remaining time, progress percentage, paused
