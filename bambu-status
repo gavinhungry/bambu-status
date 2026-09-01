@@ -16,12 +16,14 @@ format_minutes() {
   fi
 }
 
-JSON=$(curl -sH "X-API-Key: $BAMBU_STATUS_API_KEY" "$BAMBU_STATUS_URL")
+JSON=$(curl -fsH "X-API-Key: $BAMBU_STATUS_API_KEY" "$BAMBU_STATUS_URL")
 
 if [ "$1" == '--raw' ]; then
   echo "$JSON" | jq
   exit
 fi
+
+[ -z "$JSON" ] && exit 1
 
 LAST_UPDATED=$(echo "$JSON" | jq .last_updated)
 DATA_AGE_SECONDS=$(( $(date +%s) - $LAST_UPDATED ))
