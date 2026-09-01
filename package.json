@@ -1,0 +1,15 @@
+{
+  "name": "bambu-status",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HTTP status server for Bambu Lab printers via MQTT",
+  "main": "bambu-status.js",
+
+  "scripts": {
+    "start": "node bambu-status.js"
+  },
+
+  "dependencies": {
+    "mqtt": "5.x.x"
+  }
+}

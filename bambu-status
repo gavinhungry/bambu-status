@@ -1,0 +1,52 @@
+#!/bin/bash
+
+DATA_AGE_MAX_SECONDS=120
+
+format_minutes() {
+  local TOTAL_MIN="$1"
+  local HOURS=$(( TOTAL_MIN / 60 ))
+  local MIN=$(( TOTAL_MIN % 60 ))
+
+  if (( HOURS > 0 && MIN > 0 )); then
+    echo "${HOURS}h, ${MIN}m"
+  elif (( HOURS > 0 )); then
+    echo "${HOURS}h"
+  else
+    echo "${MIN}m"
+  fi
+}
+
+JSON=$(curl -sH "X-API-Key: $BAMBU_STATUS_API_KEY" "$BAMBU_STATUS_URL")
+
+if [ "$1" == '--raw' ]; then
+  echo "$JSON" | jq
+  exit
+fi
+
+LAST_UPDATED=$(echo "$JSON" | jq .last_updated)
+DATA_AGE_SECONDS=$(( $(date +%s) - $LAST_UPDATED ))
+
+if [ $DATA_AGE_SECONDS -gt $DATA_AGE_MAX_SECONDS ]; then
+  echo 'Data out of date' >&2
+  exit 1
+fi
+
+GCODE_STATE=$(echo "$JSON" | jq -r '.gcode_state // empty')
+MC_REMAINING_TIME=$(echo "$JSON" | jq '.mc_remaining_time // empty')
+MC_PERCENT=$(echo "$JSON" | jq '.mc_percent // empty')
+
+OUTPUTS=()
+[ "$GCODE_STATE" == 'PAUSE' ] && OUTPUTS+=('(paused)')
+[ -n "$MC_REMAINING_TIME" ] && OUTPUTS+=("$(format_minutes $MC_REMAINING_TIME)")
+if [ -n "$MC_PERCENT" ]; then
+  [ -n "$MC_REMAINING_TIME" ] &&
+    OUTPUTS+=("(${MC_PERCENT}%)") ||
+    OUTPUTS+=("${MC_PERCENT}%")
+fi
+
+OUTPUT_STR=''
+if [ "$GCODE_STATE" == 'RUNNING' -o "$GCODE_STATE" == 'PAUSE' ]; then
+  OUTPUT_STR="${OUTPUTS[@]}"
+fi
+
+[ -n "$OUTPUT_STR" ] && echo "$OUTPUT_STR"
