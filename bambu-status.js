@@ -4,7 +4,7 @@ const http = require('http');
 const ENV = {};
 
 ['BAMBU_IP', 'BAMBU_ACCESS', 'BAMBU_SERIAL'].forEach(envVar => {
-  const value = !process.env[envVar];
+  const value = process.env[envVar];
   if (!value) {
     console.error(`Missing required environment variable: ${envVar}`);
     process.exit(1);
