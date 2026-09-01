@@ -39,11 +39,13 @@ MC_PERCENT=$(echo "$JSON" | jq '.mc_percent // empty')
 
 OUTPUTS=()
 [ "$GCODE_STATE" == 'PAUSE' ] && OUTPUTS+=('(paused)')
-[ -n "$MC_REMAINING_TIME" ] && OUTPUTS+=("$(format_minutes $MC_REMAINING_TIME)")
-if [ -n "$MC_PERCENT" ]; then
-  [ -n "$MC_REMAINING_TIME" ] &&
-    OUTPUTS+=("(${MC_PERCENT}%)") ||
-    OUTPUTS+=("${MC_PERCENT}%")
+
+[ -n "$MC_PERCENT" ] && OUTPUTS+=("${MC_PERCENT}%")
+if [ -n "$MC_REMAINING_TIME" ]; then
+  MC_REMAINING_TIME_STR=$(format_minutes "$MC_REMAINING_TIME")
+  [ -n "$MC_PERCENT" ] &&
+    OUTPUTS+=("(${MC_REMAINING_TIME_STR})") ||
+    OUTPUTS+=("${MC_REMAINING_TIME_STR}")
 fi
 
 OUTPUT_STR=''
