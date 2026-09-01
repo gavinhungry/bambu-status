@@ -51,10 +51,6 @@ client.on('message', (topic, payload) => {
     last_updated: Math.floor(+new Date() / 1000)
   };
 
-  ['command', 'msg', 'sequence_id'].forEach(key => {
-    delete _status[key];
-  });
-
   status = _status;
 });
 
