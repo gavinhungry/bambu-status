@@ -4,9 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-User=api
-Group=api
-WorkingDirectory=/srv/api/bambu-status
+User=bambu
+Group=bambu
+WorkingDirectory=/opt/bambu-status
 ExecStart=/usr/bin/node bambu-status.js
 Restart=on-failure
 Environment=NODE_ENV=production
