@@ -84,7 +84,7 @@ state). It reads from the server via HTTP:
 > front of the server.
 
 ```sh
-bambu-status        # prints short status, e.g. "45% (1h, 20m)"
+bambu-status        # prints short status, e.g. "45% • 1h 20m"
 bambu-status --raw  # prints full raw JSON status
 ```
 

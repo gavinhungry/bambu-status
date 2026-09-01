@@ -8,7 +8,7 @@ format_minutes() {
   local MIN=$(( TOTAL_MIN % 60 ))
 
   if (( HOURS > 0 && MIN > 0 )); then
-    echo "${HOURS}h, ${MIN}m"
+    echo "${HOURS}h ${MIN}m"
   elif (( HOURS > 0 )); then
     echo "${HOURS}h"
   else
@@ -42,10 +42,8 @@ OUTPUTS=()
 
 [ -n "$MC_PERCENT" ] && OUTPUTS+=("${MC_PERCENT}%")
 if [ -n "$MC_REMAINING_TIME" ]; then
-  MC_REMAINING_TIME_STR=$(format_minutes "$MC_REMAINING_TIME")
-  [ -n "$MC_PERCENT" ] &&
-    OUTPUTS+=("(${MC_REMAINING_TIME_STR})") ||
-    OUTPUTS+=("${MC_REMAINING_TIME_STR}")
+  [ -n "$MC_PERCENT" ] && OUTPUTS+=('•')
+  OUTPUTS+=($(format_minutes "$MC_REMAINING_TIME"))
 fi
 
 OUTPUT_STR=''
