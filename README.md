@@ -50,6 +50,16 @@ Environment=BAMBU_ACCESS=your-access-code
 Environment=BAMBU_SERIAL=your-serial-number
 ```
 
+The unit file's `User`, `Group`, and `WorkingDirectory` (default `bambu` /
+`bambu` / `/opt/bambu-status`) can be overridden the same way if needed:
+
+```ini
+[Service]
+User=otheruser
+Group=othergroup
+WorkingDirectory=/path/to/bambu-status
+```
+
 Then apply it:
 
 ```sh
